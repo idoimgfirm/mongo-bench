@@ -1,7 +1,8 @@
 // adopted from https://raw.github.com/felixge/faster-than-c/master/figures/common.js
 var duration = 60 * 1000;
 
-exports.run = function(name, benchmark) {
+exports.run = function(name, benchmark, options) {
+  options = options || {};
   var startup = Date.now();
 
   var number = 0;
@@ -20,7 +21,6 @@ exports.run = function(name, benchmark) {
       if (err) throw err;
 
       var memory   = process.memoryUsage();
-      var versions = process.versions;
 
       var results = {
         benchmark   : name,
@@ -30,21 +30,21 @@ exports.run = function(name, benchmark) {
         rss         : memory.rss,
         heapUsed    : memory.heapUsed,
         heapTotal   : memory.heapTotal,
-        //nodeVersion : process.versions.node,
-        //v8Version   : process.versions.v8,
       };
 
       for (var key in extra) {
         results[key] = extra[key];
       }
 
-      print(results);
+      if (options.print !== false)
+        print(results);
 
       process.nextTick(run);
     });
   }
 
-  run();
+  for (var i = 0; i < (options.concurrent || 1); i++)
+    run();
 };
 
 var printedKeys = false;

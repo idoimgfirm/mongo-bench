@@ -1,12 +1,16 @@
 var common = require('./common');
 
 var limit = 1 * 1e3;
+var concurrent = 1;
 var mod = 'master';
 var mongodb;
 if (process.argv[2]) {
     var split = process.argv[2].split('-');
     mod = split[0];
     limit = parseInt(split[1], 10);
+    if (split.length == 3) {
+        concurrent = parseInt(split[2], 10);
+    }
     mongodb = require('./' + mod);
 }
 
@@ -16,5 +20,5 @@ new mongodb.Db('test', new mongodb.Server("127.0.0.1", 27017, {auto_reconnect: t
         c.find().limit(limit).toArray(function (err, objs) {
             cb(err, {results: objs.length});
         });
-    });
+    }, {concurrent: concurrent});
 });
