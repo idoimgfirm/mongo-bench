@@ -12,7 +12,7 @@ if (process.argv[2]) {
 
 new mongodb.Db('test', new mongodb.Server("127.0.0.1", 27017, {auto_reconnect: true}), {native_parser: true, safe: true}).open(function (error, client) {
     var c = new mongodb.Collection(client, 'tests');
-    common.run(mod + '-' + limit, function (cb) {
+    common.run(mod, function (cb) {
         c.find().limit(limit).toArray(function (err, objs) {
             cb(err, {results: objs.length});
         });

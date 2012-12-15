@@ -1,6 +1,5 @@
 // adopted from https://raw.github.com/felixge/faster-than-c/master/figures/common.js
-var duration = 30 * 1000;
-var maxNum = 1e3;
+var duration = 60 * 1000;
 
 exports.run = function(name, benchmark) {
   var startup = Date.now();
@@ -8,7 +7,7 @@ exports.run = function(name, benchmark) {
   var number = 0;
 
   function run() {
-    if (startup + duration < Date.now() || number >= maxNum) {
+    if (startup + duration < Date.now()) {
       process.exit(0);
       return;
     }
